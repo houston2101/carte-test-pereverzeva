@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Order card</title>
+		<link rel="stylesheet" href="./styles/reset.css" />
+		<link rel="stylesheet" href="./styles/index.css" />
+	</head>
+	<body>
+		<div id="app"></div>
+		<script type="importmap">
+			{
+				"imports": {
+					"vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+				}
+			}
+		</script>
+		<script type="module">
+			import {createApp, ref} from 'vue'
+			import orderCard from './components/orderCard.js'
+
+			const orders = ref(
+				await fetch('./data/index.json').then((res) => res.json())
+			)
+
+			const app = createApp({
+				components: {orderCard},
+				setup() {
+					return {orders}
+				},
+				template: `
+				<!--html-->
+				<div class="wrapper">
+                    <orderCard v-for='order in orders' :key='order.id' :order='order'></orderCard>
+                </div>`
+			})
+			app.mount('#app')
+		</script>
+	</body>
+</html>
